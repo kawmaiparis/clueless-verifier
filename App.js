@@ -36,10 +36,13 @@ class App extends React.Component {
 
 	handleSubmit = async () => {
 		console.log(this.state.data)
-		// let json = JSON.parse(this.state.data)
+		let json = JSON.parse(this.state.data)
+		console.log(json)
+		// const bucketName = 'zero-knowledge-proof-json-files'
+		// const objectName = '$userDID$timestamp.json'
 
-		const bucketName = 'zero-knowledge-proof-json-files'
-		const objectName = '$userDID$timestamp.json'
+		const bucketName = json.bucketname
+		const objectName = json.filename
 		const { name } = this.state
 		const url = `http://34.244.72.181:8080/prove-s3?bucketName=${bucketName}&name=${name}&objectName=${objectName}`
 
