@@ -5,6 +5,8 @@ import Modal, {
 	ModalTitle
 } from 'react-native-modals'
 
+// import { createStackNavigator, createAppContainer } from 'react-navigation'
+
 import {
 	StyleSheet,
 	Text,
@@ -17,7 +19,7 @@ import {
 import * as Permissions from 'expo-permissions'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 
-class App extends React.Component {
+class QrScanner extends React.Component {
 	state = {
 		hasCameraPermission: null,
 		scanned: false,
@@ -52,15 +54,11 @@ class App extends React.Component {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
 			}
-			// params: {
-			// 	bucketname: json.bucketname,
-			// 	objectName: json.filename,
-			// 	name: this.state.name
-			// }
 		}).then(response => {
 			if (response.status == 200) {
 				alert(`${name}, You have been successfully verified!`)
 			} else {
+				console.log(response)
 				alert(`${name}, sit down and eat some marmites :(`)
 			}
 			this.setState({ scanned: false })
@@ -120,4 +118,4 @@ class App extends React.Component {
 	}
 }
 
-export default App
+export default QrScanner
