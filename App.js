@@ -4,27 +4,34 @@ import Modal, {
 	ModalButton,
 	ModalTitle
 } from 'react-native-modals'
-
-// import { createStackNavigator, createAppContainer } from 'react-navigation'
+import QRCode from 'react-native-qrcode'
 
 import {
 	StyleSheet,
 	Text,
 	View,
 	Button,
-	TouchableHighlight,
-	Alert,
-	TextInput
+	TextInput,
+	StatusBar,
+	ScrollView
 } from 'react-native'
+
 import * as Permissions from 'expo-permissions'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 
 class QrScanner extends React.Component {
 	state = {
+		showProofs: false,
+		showQR: false,
+		showReader: false,
 		hasCameraPermission: null,
 		scanned: false,
 		name: '',
-		data: ''
+		data: '',
+		qrValue: '',
+		licenses: [],
+		license: '',
+		proofs: []
 	}
 
 	// async componentDidMount() {
@@ -34,6 +41,26 @@ class QrScanner extends React.Component {
 	getPermissionsAsync = async () => {
 		const { status } = await Permissions.askAsync(Permissions.CAMERA)
 		this.setState({ hasCameraPermission: status === 'granted' })
+	}
+
+	/* API Call to get Licenses */
+	getLicenses = () => {
+		const mock = ['Driving', 'Drinking', 'Gaming']
+		this.setState({ licenses: mock })
+	}
+
+	goToProof = license => {
+		/* API Call to get Proofs for this licnese */
+		const mock = ['baby', '18+', '21+', 'Dead.']
+		this.setState({ license: license, proofs: mock, showProofs: true })
+	}
+
+	goToQR = () => {
+		this.setState({ showQR: true })
+	}
+
+	goToReader = () => {
+		this.setState({ showReader: true })
 	}
 
 	handleSubmit = async () => {
@@ -63,11 +90,61 @@ class QrScanner extends React.Component {
 			}
 			this.setState({ scanned: false })
 		})
-		// alert(`Bar code with type ${type} and data ${data} has been scanned!`)
 	}
 
+	componentDidMount() {
+		this.getLicenses()
+	}
+
+	/* CHOOSE LICENSES -> PROOFS -> SHOW QR -> READER */
+
 	render() {
-		return (
+		const Licenses = (
+			<View style={styles.container}>
+				<View style={styles.list}>
+					<ScrollView contentContainerStyle={styles.scrollableList}>
+						<Text>Select Your License</Text>
+						{this.state.licenses.map(license => (
+							<Button
+								styles={styles.button}
+								color='#ff0057'
+								title={license}
+								onPress={license => this.goToProof(license)}
+							></Button>
+						))}
+					</ScrollView>
+				</View>
+			</View>
+		)
+
+		const Proofs = (
+			<View style={styles.container}>
+				<Text>Select Your Proof.</Text>
+				<View style={styles.list}>
+					<ScrollView contentContainerStyle={styles.scrollableList}>
+						{this.state.proofs.map(proof => (
+							<Button
+								color='#ff0057'
+								title={proof}
+								onPress={this.goToQR}
+							></Button>
+						))}
+					</ScrollView>
+				</View>
+			</View>
+		)
+
+		const QR = (
+			<View style={styles.container}>
+				<Text>A qr code somewhere</Text>
+				<QRCode value={this.state.qrValue} size={200} />
+				<Button
+					title='Click me once they scan'
+					onPress={this.goToReader}
+				></Button>
+			</View>
+		)
+		const Reader = (
 			<View
 				style={{
 					flex: 1,
@@ -107,15 +184,57 @@ class QrScanner extends React.Component {
 					}
 					style={StyleSheet.absoluteFillObject}
 				/>
-				{/* {this.state.scanned && (
-					<Button
-						title={'Tap to Scan Again'}
-						onPress={() => this.setState({ scanned: false })}
-					/>
-				)} */}
 			</View>
 		)
+		if (this.state.showReader) {
+			return Reader
+		}
+
+		if (this.state.showQR) {
+			return QR
+		}
+
+		if (this.state.showProofs) {
+			return Proofs
+		}
+		return Licenses
 	}
 }
 
+const styles = StyleSheet.create({
+	container: {
+		flex: 1
+		// justifyContent: 'center',
+		// backgroundColor: 'red'
+	},
+
+	list: {
+		height: 200,
+		// flex: 1,
+		// justifyContent: 'space-between',
+		// marginTop: 70,
+		// padding: 15,
+		// marginBottom: 10,
+		backgroundColor: 'blue'
+	},
+	column: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between'
+	},
+	scrollableList: {
+		marginTop: 15
+	},
+	button: {
+		width: '90%',
+		marginTop: 15,
+		padding: 20
+	}
+
+	// backgroundColor: '#fff',
+	// 	alignItems: 'center',
+	// 	justifyContent: 'center',
+	// 	width: '100%',
+	// 	backgroundColor: 'blue'
+})
 export default QrScanner
