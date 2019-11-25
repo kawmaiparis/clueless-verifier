@@ -21,9 +21,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner'
 
 class QrScanner extends React.Component {
 	state = {
-		showProofs: false,
-		showQR: false,
-		showReader: false,
+		page: 'LOGIN',
 		hasCameraPermission: null,
 		scanned: false,
 		name: '',
@@ -31,7 +29,11 @@ class QrScanner extends React.Component {
 		qrValue: '',
 		licenses: [],
 		license: '',
-		proofs: []
+		proofs: [],
+		username: '',
+		password: '',
+		schemaID: '',
+		credDefID: ''
 	}
 
 	// async componentDidMount() {
@@ -49,18 +51,41 @@ class QrScanner extends React.Component {
 		this.setState({ licenses: mock })
 	}
 
+	goToLicenses = () => {
+		this.setState({ page: 'LICENSES' })
+	}
+
+	goToSchema = () => {
+		this.setState({ page: 'SCHEMA' })
+	}
 	goToProof = license => {
 		/* API Call to get Proofs for this licnese */
 		const mock = ['baby', '18+', '21+', 'Dead.']
-		this.setState({ license: license, proofs: mock, showProofs: true })
+		this.setState({ license: license, proofs: mock, page: 'PROOFS' })
 	}
 
 	goToQR = () => {
-		this.setState({ showQR: true })
+		this.setState({ page: 'QR' })
 	}
 
 	goToReader = () => {
-		this.setState({ showReader: true })
+		this.setState({ page: 'READER' })
+	}
+
+	handleLogin = async () => {
+		let { password, username } = this.state
+		name = 'VsKV7grR1BUE29mG2Fm2kR'
+		console.log(username)
+		const url = `http://34.244.72.181:8080/credentials-for-default-proof?masterSecretId=${masterSecretID}&proverDID=${name}&proverWalletID=${username}&proverWalletKey=${password}`
+		await fetch(url)
+			.then(response => response.json())
+			.then(response => {
+				console.log(response)
+				let json = JSON.stringify(response)
+				this.setState({ qrValue: json })
+				this.setState({ showQR: true })
+			})
+			.catch(err => console.log('Well that dint work.\n' + err))
 	}
 
 	handleSubmit = async () => {
@@ -99,21 +124,69 @@ class QrScanner extends React.Component {
 	/* CHOOSE LICENSES -> PROOFS -> SHOW QR -> READER */
 
 	render() {
+		const Login = (
+			<View style={styles.container}>
+				<Text>Open up App.js to start working on your app!</Text>
+
+				<TextInput
+					style={styles.logincontainer}
+					value={this.state.username}
+					placeholder='username'
+					onChangeText={username => this.setState({ username })}
+				/>
+				<TextInput
+					style={styles.logincontainer}
+					value={this.state.password}
+					placeholder='password'
+					secureTextEntry={true}
+					onChangeText={password => this.setState({ password })}
+				/>
+
+				<Button title='log in' onPress={this.handleLogin}></Button>
+			</View>
+		)
 		const Licenses = (
 			<View style={styles.container}>
+				<View style={styles.centered}>
+					<View style={styles.headerContainer}>
+						<Text style={styles.headerText}>CHOOSE YOUR LICENSE</Text>
+					</View>
+				</View>
 				<View style={styles.list}>
 					<ScrollView contentContainerStyle={styles.scrollableList}>
-						<Text>Select Your License</Text>
 						{this.state.licenses.map(license => (
-							<Button
-								styles={styles.button}
-								color='#ff0057'
-								title={license}
-								onPress={license => this.goToProof(license)}
-							></Button>
+							<View style={styles.button}>
+								<Button
+									key={license}
+									styles={styles.button}
+									color='#ff0057'
+									title={license}
+									onPress={license => this.goToProof(license)}
+								></Button>
+							</View>
 						))}
 					</ScrollView>
 				</View>
+			</View>
+		)
+
+		const Schema = (
+			<View style={styles.container}>
+				<TextInput
+					style={styles.logincontainer}
+					value={this.state.username}
+					placeholder='Schema ID'
+					onChangeText={schemaID => this.setState({ schemaID })}
+				/>
+				<TextInput
+					style={styles.logincontainer}
+					value={this.state.password}
+					placeholder='Cred Def ID'
+					secureTextEntry={true}
+					onChangeText={credDefID => this.setState({ credDefID })}
+				/>
+
+				<Button title='log in' onPress={this.handleLogin}></Button>
 			</View>
 		)
 
@@ -186,36 +259,39 @@ class QrScanner extends React.Component {
 				/>
 			</View>
 		)
-		if (this.state.showReader) {
-			return Reader
-		}
 
-		if (this.state.showQR) {
-			return QR
+		switch (this.state.page) {
+			case 'LOGIN':
+				return Login
+			case 'LICENSES':
+				return Licenses
+			case 'SCHEMA':
+				return Schema
+			case 'PROOFS':
+				return Proofs
+			case 'QR':
+				return QR
+			case 'READER':
+				return READER
 		}
-
-		if (this.state.showProofs) {
-			return Proofs
-		}
-		return Licenses
 	}
 }
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1
-		// justifyContent: 'center',
-		// backgroundColor: 'red'
+		flex: 1,
+		justifyContent: 'center',
+		backgroundColor: 'black'
 	},
 
 	list: {
-		height: 200,
+		height: 300,
 		// flex: 1,
-		// justifyContent: 'space-between',
+		paddingBottom: 10,
+		justifyContent: 'space-between',
 		// marginTop: 70,
-		// padding: 15,
+		padding: 15
 		// marginBottom: 10,
-		backgroundColor: 'blue'
 	},
 	column: {
 		flexDirection: 'row',
@@ -223,12 +299,19 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between'
 	},
 	scrollableList: {
-		marginTop: 15
+		// marginTop: 15
 	},
 	button: {
-		width: '90%',
-		marginTop: 15,
-		padding: 20
+		padding: 15
+	},
+	centered: { alignItems: 'center' },
+	headerContainer: {
+		marginTop: 40
+	},
+	headerText: {
+		color: 'white',
+		fontSize: 22,
+		fontWeight: '500'
 	}
 
 	// backgroundColor: '#fff',
