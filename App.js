@@ -46,8 +46,33 @@ class QrScanner extends React.Component {
 	}
 
 	/* API Call to get Licenses */
-	getLicenses = () => {
+	getLicenses = async () => {
 		const mock = ['Driving', 'Drinking', 'Gaming']
+		const url = `http://34.244.72.181:8080/get-licence-type`
+
+		await fetch(url, {
+			method: 'GET',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			}
+		})
+			.then(response => response.json())
+			.then(response => {
+				console.log(response)
+				// if (response.status == 200) {
+				// 	console.log(response)
+				// 	console.log(response.data)
+				// 	this.setState({ licenses: mock })
+				// } else {
+				// 	console.log(response)
+				// 	alert(`Bad Request.`)
+				// }
+			})
+			.catch(() => {
+				alert('Bad Request.')
+			})
+
 		this.setState({ licenses: mock })
 	}
 
@@ -73,17 +98,20 @@ class QrScanner extends React.Component {
 	}
 
 	handleLogin = async () => {
-		let { password, username } = this.state
+		let { password, username, DID } = this.state
 		name = 'VsKV7grR1BUE29mG2Fm2kR'
+		const masterSecretID = 'masterSecretID'
 		console.log(username)
-		const url = `http://34.244.72.181:8080/credentials-for-default-proof?masterSecretId=${masterSecretID}&proverDID=${name}&proverWalletID=${username}&proverWalletKey=${password}`
+		const url = `http://34.244.72.181:8080/login?did=${DID}&id=${username}&key=${password}&masterDid=${masterSecretID}`
 		await fetch(url)
 			.then(response => response.json())
 			.then(response => {
 				console.log(response)
-				let json = JSON.stringify(response)
-				this.setState({ qrValue: json })
-				this.setState({ showQR: true })
+				this.getLicenses()
+				this.goToLicenses()
+				// let json = JSON.stringify(response)
+				// this.setState({ qrValue: json })
+				// this.setState({ showQR: true })
 			})
 			.catch(err => console.log('Well that dint work.\n' + err))
 	}
@@ -126,7 +154,7 @@ class QrScanner extends React.Component {
 	render() {
 		const Login = (
 			<View style={styles.container}>
-				<Text>Open up App.js to start working on your app!</Text>
+				<Text>Log in </Text>
 
 				<TextInput
 					style={styles.logincontainer}
@@ -140,6 +168,12 @@ class QrScanner extends React.Component {
 					placeholder='password'
 					secureTextEntry={true}
 					onChangeText={password => this.setState({ password })}
+				/>
+				<TextInput
+					style={styles.logincontainer}
+					value={this.state.DID}
+					placeholder='DID'
+					onChangeText={DID => this.setState({ DID })}
 				/>
 
 				<Button title='log in' onPress={this.handleLogin}></Button>
@@ -280,8 +314,8 @@ class QrScanner extends React.Component {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		justifyContent: 'center',
-		backgroundColor: 'black'
+		justifyContent: 'center'
+		// backgroundColor: 'fff'
 	},
 
 	list: {
