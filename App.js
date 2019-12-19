@@ -32,13 +32,14 @@ class QrScanner extends React.Component {
 		proofs: [],
 		username: '',
 		password: '',
-		schemaID: '',
-		credDefID: ''
+		schemaID: 'Th7MpTaRZVRYnPiabds81Y:2:driving-schema:1.0',
+		credDefID: 'Th7MpTaRZVRYnPiabds81Y:3:CL:10:Tag1',
+		DID: ''
 	}
 
-	// async componentDidMount() {
-	// 	 this.getPermissionsAsync()
-	// }
+	async componentDidMount() {
+		this.getPermissionsAsync()
+	}
 
 	getPermissionsAsync = async () => {
 		const { status } = await Permissions.askAsync(Permissions.CAMERA)
@@ -101,6 +102,7 @@ class QrScanner extends React.Component {
 		let qrInfo = JSON.stringify(json)
 		await this.setState({ qrValue: qrInfo })
 		await this.setState({ page: 'QR' })
+		console.log(this.state.qrValue)
 	}
 
 	goToReader = () => {
@@ -129,14 +131,15 @@ class QrScanner extends React.Component {
 	}
 
 	handleSubmit = async () => {
-		console.log(this.state.data)
 		let json = JSON.parse(this.state.data)
-		console.log(json)
-
-		const bucketName = json.bucketname
-		const objectName = json.filename
+		console.log(JSON.stringify(json))
+		let did = this.state.DID
+		let { password, username, schemaID } = this.state
+		const bucketName = json.bucket_name
+		const objectName = json.file_name
+		const credDefID = json.cred_def_id
 		const { name } = this.state
-		const url = `http://34.244.72.181:8080/prove-s3?bucketName=${bucketName}&name=${name}&objectName=${objectName}`
+		const url = `http://34.244.72.181:8080/prove-s3?verifierDid=${did}&bucketName=${bucketName}&name=${name}&objectName=${objectName}&credDefId=${credDefID}&schemaId=${schemaID}&verifierWalletId=${username}&verifierWalletKey=${password}`
 
 		await fetch(url, {
 			method: 'GET',
@@ -279,7 +282,7 @@ class QrScanner extends React.Component {
 				></Button>
 			</View>
 		)
-		const Reader = (
+		const READER = (
 			<View
 				style={{
 					flex: 1,
