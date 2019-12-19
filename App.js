@@ -3,16 +3,18 @@ import { Button, View, Text } from 'react-native'
 import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 
-import HomeScreen from './HomeScreen'
+import Login from './Login'
 import DetailsScreen from './DetailsScreen.js'
+
+/* LOGIN ->  LICENSES -> SCHEMA -> PROOFS -> SHOW QR -> READER */
 
 const RootStack = createStackNavigator(
 	{
-		Home: HomeScreen,
+		Login: Login,
 		Details: DetailsScreen
 	},
 	{
-		initialRouteName: 'Home',
+		initialRouteName: 'Login',
 		defaultNavigationOptions: {
 			headerTransparent: true
 		}

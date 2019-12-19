@@ -2,12 +2,12 @@
 import React from 'react'
 import { StyleSheet, TextInput } from 'react-native'
 import { inputPlaceholder } from '../utils/Colors'
-const Input = ({ inputValue, onChangeText, onDoneAddItem }) => (
+const InputPassword = ({ title, inputValue, onChangeText, onDoneAddItem }) => (
 	<TextInput
 		style={styles.input}
 		value={inputValue}
 		onChangeText={onChangeText}
-		placeholder='Type here to add note.'
+		placeholder={title + '.'}
 		placeholderTextColor={inputPlaceholder}
 		multiline={true}
 		autoCapitalize='sentences'
@@ -17,6 +17,7 @@ const Input = ({ inputValue, onChangeText, onDoneAddItem }) => (
 		returnKeyType='done'
 		autoCorrect={false}
 		blurOnSubmit={true}
+		secureTextEntry={true}
 		onSubmitEditing={onDoneAddItem}
 	/>
 )
@@ -26,7 +27,9 @@ const styles = StyleSheet.create({
 		paddingRight: 15,
 		fontSize: 34,
 		color: 'white',
-		fontWeight: '500'
+		fontWeight: '500',
+		textAlign: 'left',
+		width: '100%'
 	}
 })
-export default Input
+export default InputPassword
