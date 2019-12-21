@@ -3,15 +3,17 @@ import { Button, View, Text } from 'react-native'
 import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 
-import Login from './Login'
-import DetailsScreen from './DetailsScreen.js'
+import Login from './pages/Login'
+import License from './pages/License'
+import Proof from './pages/Proof'
 
 /* LOGIN ->  LICENSES -> SCHEMA -> PROOFS -> SHOW QR -> READER */
 
 const RootStack = createStackNavigator(
 	{
 		Login: Login,
-		Details: DetailsScreen
+		License: License,
+		Proof: Proof
 	},
 	{
 		initialRouteName: 'Login',

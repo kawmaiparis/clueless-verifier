@@ -2,27 +2,46 @@ import React from 'react'
 
 import { StyleSheet, Text, View, StatusBar, Button } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { primaryGradientArray } from './utils/Colors'
+import { primaryGradientArray } from '../utils/Colors'
+import { serverIP } from '../utils/Config'
 
-import Header from './components/Header.js'
-import InputText from './components/InputText.js'
-import InputPassword from './components/InputPassword.js'
-import MyButton from './components/MyButton.js'
+import Header from '../components/Header.js'
+import InputText from '../components/InputText.js'
+import InputPassword from '../components/InputPassword.js'
+import MyButton from '../components/MyButton.js'
 
 class HomeScreen extends React.Component {
 	state = {
 		username: '',
-		password: '',
-		DID: ''
-	}
-	newInputValue = value => {
-		this.setState({
-			inputValue: value
-		})
+		password: ''
 	}
 
 	static navigationOptions = {
 		headerTransparent: true
+	}
+
+	handleLogin = () => {
+		return new Promise(async (resolve, reject) => {
+			let { password, username } = this.state
+			const DID = 'DID'
+			const masterSecretID = 'masterSecretId'
+			const url = `${serverIP}login?did=${DID}&id=${username}&key=${password}&masterDid=${masterSecretID}`
+			await fetch(url)
+				.then(response => response.json())
+				.then(response => {
+					if (response.masterSecretId == 'masterSecretId') {
+						resolve(true)
+					} else {
+						alert('Error loggin in.')
+						resolve(false)
+					}
+				})
+				.catch(err => {
+					console.log(err)
+					alert('Error logging in.')
+					resolve(false)
+				})
+		})
 	}
 
 	render() {
@@ -49,23 +68,19 @@ class HomeScreen extends React.Component {
 							onChangeText={password => this.setState({ password })}
 						/>
 					</View>
-					<View style={styles.inputContainer}>
-						<InputText
-							title='Your DID'
-							value={this.state.DID}
-							onChangeText={DID => this.setState({ DID })}
-						/>
-					</View>
 					<MyButton
 						title='Submit'
 						onPress={async next => {
 							// Simulate server request
-							await new Promise(resolve => setTimeout(resolve, 3000))
+							// await new Promise(resolve => setTimeout(resolve, 1500))
+							const res = await this.handleLogin()
 							next()
-							this.props.navigation.navigate('Details', {
-								itemId: 86,
-								otherParam: 'anything you want here'
-							})
+							if (res) {
+								this.props.navigation.navigate('License', {
+									itemId: 86,
+									otherParam: 'anything you want here'
+								})
+							}
 						}}
 					/>
 				</View>
