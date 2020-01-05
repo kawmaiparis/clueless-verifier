@@ -5,9 +5,13 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { primaryGradientArray } from '../utils/Colors'
 import { serverIP } from '../utils/Config'
 
-import Header from '../components/Header.js'
+import Header from '../components/HeaderWhite.js'
 import InputName from '../components/inputName.js'
 import MyButton from '../components/MyButton.js'
+
+import A from '../assets/svgs/sixthA.svg'
+import B from '../assets/svgs/sixthB.svg'
+import C from '../assets/svgs/sixthC.svg'
 
 class VerifyName extends React.Component {
 	state = {
@@ -54,10 +58,20 @@ class VerifyName extends React.Component {
 
 	render() {
 		return (
-			<LinearGradient colors={primaryGradientArray} style={styles.container}>
+			<LinearGradient colors={['#f0f0f0', '#f0f0f0']} style={styles.container}>
 				<View
 					style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
 				>
+					<View style={styles.A}>
+						<A width={900} height={900} />
+					</View>
+					{/* <View style={styles.B}>
+						<B width={600} height={600} />
+					</View> */}
+					{/* <View style={styles.C}>
+						<C width={200} height={200} />
+					</View> */}
+
 					<StatusBar barStyle='light-content' />
 					<View style={styles.centered}>
 						<Header title="Verify the Prover's name" />
@@ -94,6 +108,21 @@ const styles = StyleSheet.create({
 		paddingLeft: 15,
 		width: '100%',
 		height: 50
+	},
+	A: {
+		position: 'absolute',
+		right: -180,
+		top: -100
+	},
+	B: {
+		position: 'absolute',
+		right: 15,
+		bottom: -100
+	},
+	C: {
+		position: 'absolute',
+		right: 10,
+		bottom: 70
 	}
 })
 

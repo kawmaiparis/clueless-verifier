@@ -7,8 +7,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner'
 
 import Header from '../components/Header.js'
 
-import A from './../assets/svgs/fifthA.svg'
-import B from './../assets/svgs/fifthB.svg'
+import B from './../assets/svgs/thirdB.svg'
 
 class ReadQR extends React.Component {
 	static navigationOptions = {
@@ -29,9 +28,6 @@ class ReadQR extends React.Component {
 				>
 					<StatusBar barStyle='light-content' />
 
-					<View style={styles.A}>
-						<A width={300} height={300} />
-					</View>
 					<View style={styles.B}>
 						<B width={500} height={500} />
 					</View>
@@ -73,14 +69,10 @@ const styles = StyleSheet.create({
 		height: 50
 	},
 	camera: {
-		width: 800,
-		height: 800
+		width: 1000,
+		height: 1000
 	},
-	A: {
-		position: 'absolute',
-		left: 20,
-		top: 100
-	},
+
 	B: {
 		position: 'absolute',
 		right: 0,

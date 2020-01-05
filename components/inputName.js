@@ -12,7 +12,14 @@ const InputName = ({ title, inputValue, onChangeText, onDoneAddItem }) => (
 			color: 'grey'
 		}}
 		leftIconContainerStyle={{ marginRight: 5 }}
+		inputStyle={styles.input}
+		// color={white}
 	/>
 )
+const styles = StyleSheet.create({
+	input: {
+		color: 'white'
+	}
+})
 
 export default InputName
