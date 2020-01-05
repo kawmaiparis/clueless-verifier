@@ -8,11 +8,11 @@ const InputText = ({ title, inputValue, onChangeText, onDoneAddItem }) => (
 		placeholder={title}
 		leftIcon={{ type: 'antdesign', name: 'smile-circle', color: 'grey' }}
 		leftIconContainerStyle={{ marginRight: 5 }}
+		onChangeText={onChangeText}
+		value={inputValue}
 	/> // <View style={styles.view}>
 	// 	<TextInput
 	// 		style={styles.input}
-	// 		value={inputValue}
-	// 		onChangeText={onChangeText}
 	// 		placeholder={title + '.'}
 	// 		placeholderTextColor={'black'}
 	// 		multiline={true}

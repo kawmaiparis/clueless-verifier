@@ -1,6 +1,13 @@
 import React from 'react'
 
-import { StyleSheet, Text, View, StatusBar, Button } from 'react-native'
+import {
+	StyleSheet,
+	Text,
+	View,
+	StatusBar,
+	Button,
+	ClippingRectangle
+} from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { primaryGradientArray } from '../utils/Colors'
 import { BarCodeScanner } from 'expo-barcode-scanner'

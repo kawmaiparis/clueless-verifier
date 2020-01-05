@@ -7,6 +7,8 @@ const InputDID = ({ title, inputValue, onChangeText, onDoneAddItem }) => (
 		placeholder={title}
 		leftIcon={{ type: 'antdesign', name: 'questioncircle', color: 'grey' }}
 		leftIconContainerStyle={{ marginRight: 5 }}
+		onChangeText={onChangeText}
+		value={inputValue}
 	/>
 )
 

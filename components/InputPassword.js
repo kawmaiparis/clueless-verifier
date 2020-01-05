@@ -9,6 +9,8 @@ const InputPassword = ({ title, inputValue, onChangeText, onDoneAddItem }) => (
 		leftIcon={{ type: 'antdesign', name: 'key', color: 'grey' }}
 		leftIconContainerStyle={{ marginRight: 5 }}
 		secureTextEntry={true}
+		onChangeText={onChangeText}
+		value={inputValue}
 	/>
 	// <View style={styles.view}>
 	// 	<TextInput

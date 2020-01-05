@@ -13,6 +13,8 @@ const InputName = ({ title, inputValue, onChangeText, onDoneAddItem }) => (
 		}}
 		leftIconContainerStyle={{ marginRight: 5 }}
 		inputStyle={styles.input}
+		onChangeText={onChangeText}
+		value={inputValue}
 		// color={white}
 	/>
 )

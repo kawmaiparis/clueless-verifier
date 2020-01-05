@@ -1,6 +1,12 @@
 import React from 'react'
 
-import { StyleSheet, View, StatusBar, KeyboardAvoidingView } from 'react-native'
+import {
+	StyleSheet,
+	View,
+	StatusBar,
+	KeyboardAvoidingView,
+	ClippingRectangle
+} from 'react-native'
 
 import { LinearGradient } from 'expo-linear-gradient'
 import { primaryGradientArray } from '../utils/Colors'
@@ -30,14 +36,16 @@ class Login extends React.Component {
 	handleLogin = () => {
 		return new Promise(async (resolve, reject) => {
 			let { password, username } = this.state
+			console.log(this.state)
 			const DID = 'DID'
 			const masterSecretID = 'masterSecretId'
 			const url = `${serverIP}login?did=${DID}&id=${username}&key=${password}&masterDid=${masterSecretID}`
-			resolve(true)
+			// resolve(true)
 
 			await fetch(url)
 				.then(response => response.json())
 				.then(response => {
+					console.log(response)
 					if (response.masterSecretId == 'masterSecretId') {
 						resolve(true)
 					} else {
@@ -80,7 +88,9 @@ class Login extends React.Component {
 						<InputText
 							title='Username'
 							value={this.state.username}
-							onChangeText={username => this.setState({ username })}
+							onChangeText={username => {
+								this.setState({ username })
+							}}
 						/>
 					</View>
 					<View style={styles.inputContainer}>

@@ -31,11 +31,15 @@ class VerifyName extends React.Component {
 		const data = navigation.getParam('data', 'No Data was passed here')
 		const name = this.state.name
 
-		let json = JSON.parse(data)
-		console.log(data)
+		console.log('here')
+
+		let json = JSON.parse(JSON.parse(data))
 		console.log(json)
+		console.log(typeof json)
 		const bucketName = json.bucket_name
 		const objectName = json.file_name
+		console.log(bucketName)
+		console.log(objectName)
 
 		const url = `${serverIP}prove-s3?verifierDid=${DID}&bucketName=${bucketName}&name=${name}&objectName=${objectName}&verifierWalletId=${username}&verifierWalletKey=${password}&proof=${proof}`
 		console.log(url)
@@ -48,10 +52,10 @@ class VerifyName extends React.Component {
 		}).then(response => {
 			next()
 			if (response.status == 200) {
-				alert(`${name}, You have been successfully verified!`)
+				alert(`${name} have been successfully verified!`)
 			} else {
 				console.log(response)
-				alert(`${name}, sit down and eat some marmites :(`)
+				alert(`${name} has failed to verify`)
 			}
 		})
 	}
@@ -63,7 +67,7 @@ class VerifyName extends React.Component {
 					style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
 				>
 					<View style={styles.A}>
-						<A width={900} height={900} />
+						<A width={1100} height={1100} />
 					</View>
 					{/* <View style={styles.B}>
 						<B width={600} height={600} />
@@ -111,7 +115,7 @@ const styles = StyleSheet.create({
 	},
 	A: {
 		position: 'absolute',
-		right: -180,
+		right: -220,
 		top: -100
 	},
 	B: {
