@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { StyleSheet, Text, View, StatusBar, Button } from 'react-native'
+import { StyleSheet, View, StatusBar, KeyboardAvoidingView } from 'react-native'
+
 import { LinearGradient } from 'expo-linear-gradient'
 import { primaryGradientArray } from '../utils/Colors'
 import { serverIP } from '../utils/Config'
@@ -8,12 +9,18 @@ import { serverIP } from '../utils/Config'
 import Header from '../components/Header.js'
 import InputText from '../components/InputText.js'
 import InputPassword from '../components/InputPassword.js'
+import InputDID from '../components/InputDID.js'
 import MyButton from '../components/MyButton.js'
+import Three from './../assets/svgs/firstB.svg'
+import Spots from './../assets/svgs/firstA.svg'
 
-class HomeScreen extends React.Component {
+// import loginPNG from './../assets/arabica/login.png'
+
+class Login extends React.Component {
 	state = {
 		username: '',
-		password: ''
+		password: '',
+		DID: ''
 	}
 
 	static navigationOptions = {
@@ -26,6 +33,8 @@ class HomeScreen extends React.Component {
 			const DID = 'DID'
 			const masterSecretID = 'masterSecretId'
 			const url = `${serverIP}login?did=${DID}&id=${username}&key=${password}&masterDid=${masterSecretID}`
+			resolve(true)
+
 			await fetch(url)
 				.then(response => response.json())
 				.then(response => {
@@ -46,11 +55,24 @@ class HomeScreen extends React.Component {
 
 	render() {
 		return (
-			<LinearGradient colors={primaryGradientArray} style={styles.container}>
-				<View
-					style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+			<LinearGradient colors={['#f0f0f0', '#f0f0f0']} style={styles.container}>
+				<KeyboardAvoidingView
+					style={{
+						flex: 1,
+						alignItems: 'center',
+						justifyContent: 'center'
+					}}
+					behavior='padding'
 				>
+					<View style={styles.three}>
+						<Three width={300} height={300} />
+					</View>
+					<View style={styles.spots}>
+						<Spots width={100} height={100} />
+					</View>
+
 					<StatusBar barStyle='light-content' />
+
 					<View style={styles.centered}>
 						<Header title='Verifier Login' />
 					</View>
@@ -68,22 +90,29 @@ class HomeScreen extends React.Component {
 							onChangeText={password => this.setState({ password })}
 						/>
 					</View>
+					<View style={styles.inputContainer}>
+						<InputDID
+							title='Your DID'
+							value={this.state.DID}
+							onChangeText={DID => this.setState({ DID })}
+						/>
+					</View>
+
 					<MyButton
 						title='Submit'
 						onPress={async next => {
-							// Simulate server request
-							// await new Promise(resolve => setTimeout(resolve, 1500))
 							const res = await this.handleLogin()
 							next()
 							if (res) {
 								this.props.navigation.navigate('License', {
-									itemId: 86,
-									otherParam: 'anything you want here'
+									username: this.state.username,
+									password: this.state.password,
+									DID: this.state.DID
 								})
 							}
 						}}
 					/>
-				</View>
+				</KeyboardAvoidingView>
 			</LinearGradient>
 		)
 	}
@@ -94,15 +123,47 @@ const styles = StyleSheet.create({
 		flex: 1
 	},
 	centered: {
+		marginTop: 50,
+		marginBottom: -10,
 		alignItems: 'center',
 		width: 300
 	},
 	inputContainer: {
-		marginTop: 40,
-		paddingLeft: 15,
+		marginTop: 20,
+		paddingLeft: 45,
+		paddingRight: 45,
 		width: '100%',
 		height: 50
+	},
+	image: {
+		width: 300,
+		height: 200,
+		resizeMode: 'contain',
+		marginTop: 50
+	},
+
+	blob: {
+		position: 'absolute',
+		left: 0,
+		top: 0,
+		backgroundColor: '#f0f0f0',
+		width: '100%',
+		height: 680,
+		borderBottomLeftRadius: 35,
+		borderBottomRightRadius: 35
+
+		// zIndex: -1
+	},
+	three: {
+		position: 'absolute',
+		left: -40,
+		bottom: -140
+	},
+	spots: {
+		position: 'absolute',
+		right: 0,
+		top: 0
 	}
 })
 
-export default HomeScreen
+export default Login

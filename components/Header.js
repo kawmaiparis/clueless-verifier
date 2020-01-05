@@ -11,13 +11,14 @@ const Header = ({ title }) => {
 
 const styles = StyleSheet.create({
 	headerContainer: {
-		marginBottom: 40,
-		width: 300
+		marginBottom: 20,
+		width: '100%'
 	},
 	headerText: {
-		color: 'white',
-		fontSize: 22,
-		fontWeight: '500',
+		fontFamily: 'Poppins-ExtraLight',
+		color: 'black',
+		fontSize: 40,
+		// fontWeight: '500',
 		textAlign: 'center'
 	}
 })

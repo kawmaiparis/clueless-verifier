@@ -5,8 +5,11 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { primaryGradientArray } from '../utils/Colors'
 
 import Header from '../components/Header.js'
-import MyButton from '../components/MyButton.js'
+import MyButton from '../components/ListElement.js'
 import { serverIP } from '../utils/Config'
+
+import Reddish from './../assets/svgs/secondA.svg'
+import Darkish from './../assets/svgs/secondDark.svg'
 
 class License extends React.Component {
 	state = {
@@ -42,14 +45,22 @@ class License extends React.Component {
 	render() {
 		/* 2. Get the param, provide a fallback value if not available */
 		const { navigation } = this.props
-		const itemId = navigation.getParam('itemId', 'NO-ID')
-		const otherParam = navigation.getParam('otherParam', 'some default value')
+		const username = navigation.getParam('username', 'default username')
+		const password = navigation.getParam('password', 'default password')
+		const DID = navigation.getParam('DID', 'default DID')
 
 		return (
-			<LinearGradient colors={primaryGradientArray} style={styles.container}>
+			<LinearGradient colors={['#f0f0f0', '#f0f0f0']} style={styles.container}>
 				<View
 					style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
 				>
+					<View style={styles.reddish}>
+						<Reddish width={200} height={200} />
+					</View>
+					<View style={styles.darkish}>
+						<Darkish width={200} height={200} />
+					</View>
+
 					<View style={styles.centered}>
 						<Header title='Choose your License' />
 					</View>
@@ -61,8 +72,9 @@ class License extends React.Component {
 								await new Promise(resolve => setTimeout(resolve, 1000))
 								next()
 								this.props.navigation.navigate('Proof', {
-									itemId: 86,
-									otherParam: 'anything you want here',
+									username: username,
+									password: password,
+									DID: DID,
 									license: license
 								})
 							}}
@@ -80,7 +92,18 @@ const styles = StyleSheet.create({
 	},
 	centered: {
 		alignItems: 'center',
-		width: 300
+		width: 300,
+		marginBottom: -40
+	},
+	reddish: {
+		position: 'absolute',
+		left: 0,
+		top: 0
+	},
+	darkish: {
+		position: 'absolute',
+		right: 0,
+		bottom: 0
 	}
 })
 

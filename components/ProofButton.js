@@ -8,12 +8,12 @@ const MyButton = ({ title, onPress }) => (
 			activityColor='#fff'
 			borderRadius={25}
 			textSize={20}
-			backgroundColor='#EE3253'
-			backgroundDarker='#fff'
-			backgroundPlaceholder='#8dbdd9'
-			textColor='#fff'
-			backgroundProgress='#fff'
-			height={100}
+			backgroundColor='#e65a5a'
+			backgroundDarker='#d9d9d9'
+			backgroundPlaceholder='#e65a5a'
+			textColor='#000'
+			backgroundProgress='#f0f0f0'
+			height={80}
 			stretch
 			progress
 			onPress={next => {

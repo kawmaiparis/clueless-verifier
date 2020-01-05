@@ -8,6 +8,9 @@ import Header from '../components/Header.js'
 import ProofButton from '../components/ProofButton.js'
 import { serverIP } from '../utils/Config'
 
+import A from './../assets/svgs/thirdA.svg'
+import B from './../assets/svgs/thirdB.svg'
+
 class Proof extends React.Component {
 	state = {
 		license: '',
@@ -42,14 +45,33 @@ class Proof extends React.Component {
 			})
 	}
 	render() {
+		const { navigation } = this.props
+		const username = navigation.getParam('username', 'default username')
+		const password = navigation.getParam('password', 'default password')
+		const DID = navigation.getParam('DID', 'default DID')
+		const license = navigation.getParam('license', 'No License was passed here')
+
 		return (
-			<LinearGradient colors={primaryGradientArray} style={styles.container}>
+			<LinearGradient colors={['#f0f0f0', '#f0f0f0']} style={styles.container}>
 				<View
-					style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+					style={{
+						flex: 1,
+						alignItems: 'center',
+						justifyContent: 'center',
+						marginBottom: -40
+					}}
 				>
-					<View style={styles.centered}>
-						<Header title={`Proofs for ${this.state.license}`} />
+					<View style={styles.A}>
+						<A width={300} height={300} />
 					</View>
+					<View style={styles.B}>
+						<B width={500} height={500} />
+					</View>
+
+					<View style={styles.centered}>
+						<Header title={`${this.state.license} Proofs`} />
+					</View>
+
 					{this.state.proofs.map(proof => (
 						<ProofButton
 							key={proof}
@@ -57,9 +79,11 @@ class Proof extends React.Component {
 							onPress={async next => {
 								await new Promise(resolve => setTimeout(resolve, 1000))
 								next()
-								this.props.navigation.navigate('Proof', {
-									itemId: 86,
-									otherParam: 'anything you want here',
+								this.props.navigation.navigate('ShowQR', {
+									username: username,
+									password: password,
+									DID: DID,
+									license: license,
 									proof: proof
 								})
 							}}
@@ -77,7 +101,18 @@ const styles = StyleSheet.create({
 	},
 	centered: {
 		alignItems: 'center',
-		width: 300
+		width: '100%',
+		marginBottom: -20
+	},
+	A: {
+		position: 'absolute',
+		left: 20,
+		bottom: 10
+	},
+	B: {
+		position: 'absolute',
+		right: -130,
+		top: -160
 	}
 })
 

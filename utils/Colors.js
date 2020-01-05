@@ -1,6 +1,8 @@
 // app/utils/Colors.js
 const primaryStart = '#f18a69'
 const primaryEnd = '#d13e60'
+// const primaryStart = '#EBEBEB'
+// const primaryEnd = '#EBEBEB'
 export const primaryGradientArray = [primaryStart, primaryEnd]
 export const lightWhite = '#fcefe9'
 export const inputPlaceholder = '#f1a895'
